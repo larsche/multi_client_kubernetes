@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: postgres-deployment
+spec:
+    replicas: 1
+    selector: 
+        matchLabels:
+            component: postgres
+    template:
+        metadata:
+            labels:
+                component: postgres
+        spec:
+            # this allocates the storage and asks for the claim... needs to be mounted to the 
+            volumes:
+                - name: postgres-storage
+                  persistentVolumeClaim:
+                    claimName: database-persistent-volume-claim
+            containers:
+                - name: client
+                  image: postgres
+                  ports:
+                    - containerPort: 5432
+                  volumeMounts:
+                    # the volume name and volumemounts name  are identical
+                    - name: postgres-storage
+                      # ideally use the datafolder
+                      mountPath: /var/lib/postgresql/data
+                      # this is specific for postgres. When storing the mount in the volume claim outside it will put the data folder in a folder named postgres
+                      subPath: postgres
+                  env:
+                    - name: POSTGRES_PASSWORD
+                      valueFrom: 
+                          secretKeyRef:
+                              name: pgpassword
+                              key: PGPASSWORD
+                
+

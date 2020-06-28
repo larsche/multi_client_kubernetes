@@ -15,8 +15,13 @@ spec:
             containers: 
                 - name: worker
                   image: stephengrider/multi-worker
+                  env: 
+                    - name: REDIS_HOST
+                      value: redis-cluster-ip-service
+                    - name: REDIS_PORT
+                      value: '6379'
 
                
- ### adding the enviroment variable later for redis
+ ### adding the environment variable later for redis
  # there is nothing that need to connect to the worker,
- # so it doesnt need a service
+ # so it doesn't need a service
