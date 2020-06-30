@@ -1,0 +1,18 @@
+docker build -t schemcodes/multi-client:latest -t schemcodes/multi-client:$SHA -f ./client/Dockerfile ./client
+docker build -t schemcodes/multi-server:latest -t schemcodes/multi-server:$SHA -f ./server/Dockerfile ./server
+docker build -t schemcodes/multi-worker:latest -t schemcodes/multi-worker:$SHA -f ./worker/Dockerfile ./worker
+
+docker push schemcodes/multi-client:latest
+docker push schemcodes/multi-server:latest 
+docker push schemcodes/multi-worker:latest
+
+docker push schemcodes/multi-client:$SHA
+docker push schemcodes/multi-server:$SHA 
+docker push schemcodes/multi-worker:$SHA
+
+kubectl apply -f k8s
+kubectl set image deployements/server-deployments server=schemcodes/multi-server:$SHA
+kubectl set image deployements/client-deployments client=schemcodes/multi-client:$SHA
+kubectl set image deployements/worker-deployments worker=schemcodes/multi-worker:$SHA
+
+# since we installed kubectl we can now apply with 
