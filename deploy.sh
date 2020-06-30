@@ -11,8 +11,8 @@ docker push schemcodes/multi-server:$SHA
 docker push schemcodes/multi-worker:$SHA
 
 kubectl apply -f k8s
-kubectl set image deployements/server-deployments server=schemcodes/multi-server:$SHA
-kubectl set image deployements/client-deployments client=schemcodes/multi-client:$SHA
-kubectl set image deployements/worker-deployments worker=schemcodes/multi-worker:$SHA
+kubectl set image deployments/server-deployments server=schemcodes/multi-server:$SHA
+kubectl set image deployments/client-deployments client=schemcodes/multi-client:$SHA
+kubectl set image deployments/worker-deployments worker=schemcodes/multi-worker:$SHA
 
 # since we installed kubectl we can now apply with 
